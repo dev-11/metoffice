@@ -25,8 +25,8 @@ jobs:
       - name: Zip Lambda function
         run: |
           cd package || mkdir package
-          cp -r entry_point/*.py
-          cp -r repositories/*.py
+          cp -r entry_point/*.py ./entry_point
+          cp -r repositories/*.py ./repositories
           cp -r ../*.py .
           zip -r ../function.zip .
 

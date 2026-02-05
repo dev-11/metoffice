@@ -24,7 +24,4 @@ def lambda_handler(event, context):
 
             results.append((front_type, datetime))
 
-    return {
-        'statusCode': 200,
-        'body': results
-    }
+    return results

@@ -4,8 +4,10 @@ from datetime import datetime as dt
 import bs4
 import requests
 import config as c
+from lambda_handler_wrapper import lambda_handler_wrapper as wrapper
 
 
+@wrapper
 def lambda_handler(event, context):
 
     page = requests.get(c.medical_meteorology_url)

@@ -25,7 +25,7 @@ def lambda_handler(event, context):
 
             datetime = parse(date)
 
-            results.append((front_type, datetime))
+            results.append({'front_type': front_type, 'date': datetime})
 
     return results
 

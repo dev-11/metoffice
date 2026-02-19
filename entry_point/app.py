@@ -27,7 +27,10 @@ def lambda_handler(event, context):
 
             results.append({'front_type': front_type, 'date': datetime})
 
-    return results
+    return {
+        'forecast': results,
+        'timestamp': dt.now().isoformat()
+    }
 
 
 def parse(date):

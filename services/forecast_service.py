@@ -1,27 +1,34 @@
-import copy
 from datetime import datetime, timezone
 
 
 class ForecastService:
     @staticmethod
-    def update_forecast(history, forecast):
-        target_date = forecast["target_date"]
+    def update_forecast(day, forecast):
         front_type = forecast["front_type"]
-
-        day = history.setdefault(target_date, {"target_date": target_date, "forecasts": []})
         if not day["forecasts"] or day["forecasts"][-1]["front_type"] != front_type:
             day["forecasts"].append({
                 "observed_at": datetime.now(timezone.utc).isoformat(),
                 "front_type": front_type,
             })
-
         return day
 
     def update_forecasts(self, history, new_forecasts):
-        results = copy.deepcopy(history)
+        results = list(history)
+
         for f in new_forecasts:
-            self.update_forecast(results, f)
+            target_date = f["target_date"]
+            day = next((d for d in results if d["target_date"] == target_date), None)
+            if day is None:
+                day = self.empty_forecast(target_date)
+                results.append(day)
+
+            self.update_forecast(day, f)
+
         return results
+
+    @staticmethod
+    def empty_forecast(day):
+        return {"target_date": day, "forecasts": []}
 
     @staticmethod
     def current_forecast(history, target_date):

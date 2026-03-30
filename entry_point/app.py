@@ -33,21 +33,5 @@ def lambda_handler(event, context):
     }
 
 
-def record_forecast(history: list, target_date: str, front_type: str):
-    observed_at = dt.now(timezone.utc).isoformat()
-
-    day = next((d for d in history if d["target_date"] == target_date), None)
-
-    if day is None:
-        day = {"target_date": target_date, "forecasts": []}
-        history.append(day)
-
-    last = day["forecasts"][-1] if day["forecasts"] else None
-    if last is None or last["front_type"] != front_type:
-        day["forecasts"].append({"observed_at": observed_at, "front_type": front_type})
-
-    return history
-
-
 def parse_bool(v):
     return str(v).lower() in ("yes", "true", "t", "1")

@@ -1,5 +1,5 @@
 from datetime import datetime as dt
-from service.service_factory import ServiceFactory
+from services import ServiceFactory
 
 import config as c
 

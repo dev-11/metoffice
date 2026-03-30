@@ -1,4 +1,4 @@
-from service.scraper_service import ScraperService
+from services.scraper_service import ScraperService
 
 
 class ServiceFactory:

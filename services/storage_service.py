@@ -10,8 +10,12 @@ class StorageService:
         self._repo = repo
 
     def get(self, key):
-        data = self._repo.get_body(key)
-        return json.loads(data)
+        if self._repo.has_key(key):
+            data = self._repo.get_body(key)
+            if data:
+                return json.loads(data)
+
+        return {}
 
     def save_or_update(self, key, data):
         return self._repo.save_or_update_file(key, json.dumps(data))

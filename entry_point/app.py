@@ -18,48 +18,23 @@ def lambda_handler(event, context):
     scraper_service = sf.get_scraper_service()
     latest_forecast = scraper_service.get_latest_forecast()
 
-    # [
-    #     {
-    #         "front_type": "Nincs front",
-    #         "date": "2026-03-30T00:00:00"
-    #     },
-    #     {
-    #         "front_type": "Nincs front",
-    #         "date": "2026-03-31T00:00:00"
-    #     }
-    # ]
+    storage_service = sf.get_storage_service()
+    history = storage_service.get(c.data_file)
 
-    result = record_forecast([], latest_forecast[0]["date"], latest_forecast[0]["front_type"])
+    forecast_service = sf.get_forecast_service()
+    results = forecast_service.update_forecasts(history, latest_forecast)
 
-    # [
-    #     {
-    #         "target_date": "2026-03-31",
-    #         "forecasts": [
-    #             {"observed_at": "2026-03-30T08:00:00Z", "front_type": "cold_front"},
-    #             {"observed_at": "2026-03-30T14:00:00Z", "front_type": "warm_front"},
-    #             {"observed_at": "2026-03-31T08:00:00Z", "front_type": "no_front"}
-    #         ]
-    #     }
-    # ]
-
-    # forecast_service = sf.get_forcast_service()
-    # forecast_service.update_forecast(latest_forecast)
-
-    # storage_service = sf.get_storage_service()
-    # is_saved = storage_service.save_or_update(c.data_file, latest_forecast)
-    #
-    # forecasts = storage_service.get(c.data_file) if is_saved else {}
+    storage_service = sf.get_storage_service()
+    storage_service.save_or_update(c.data_file, results)
 
     return {
-        'forecast': result,
+        'forecast': results,
         'timestamp': dt.now().isoformat()
     }
 
 
-def record_forecast(history: list, target_date: str, front_type: str, observed_at: str = None):
-    """Add a forecast snapshot if the front_type has changed."""
-    if observed_at is None:
-        observed_at = dt.now(timezone.utc).isoformat()
+def record_forecast(history: list, target_date: str, front_type: str):
+    observed_at = dt.now(timezone.utc).isoformat()
 
     day = next((d for d in history if d["target_date"] == target_date), None)
 

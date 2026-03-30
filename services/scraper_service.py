@@ -25,7 +25,7 @@ class ScraperService:
 
                 datetime = self.parse(date)
 
-                results.append({'front_type': front_type, 'date': datetime})
+                results.append({'front_type': front_type, 'target_date': datetime})
 
         return results
 

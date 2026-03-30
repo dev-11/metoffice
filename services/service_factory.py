@@ -1,3 +1,4 @@
+from services.forecast_service import ForecastService
 from services.scraper_service import ScraperService
 from services.storage_service import StorageService
 
@@ -13,3 +14,7 @@ class ServiceFactory:
     @staticmethod
     def get_storage_service() -> StorageService:
         return StorageService(S3Repository(c.data_bucket))
+
+    @staticmethod
+    def get_forecast_service() -> ForecastService:
+        return ForecastService()

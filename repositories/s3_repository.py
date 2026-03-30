@@ -1,6 +1,9 @@
 import boto3
 from botocore.errorfactory import ClientError
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 class S3Repository:
     def __init__(self, bucket):
@@ -30,6 +33,7 @@ class S3Repository:
             obj = self._s3.Object(self._bucket, key)
             obj.put(Body=body)
 
-        except ClientError:
+        except ClientError as ce:
+            logger.exception(f"Error saving file {ce}")
             return False
         return True

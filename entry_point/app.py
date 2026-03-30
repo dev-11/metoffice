@@ -24,8 +24,8 @@ def lambda_handler(event, context):
     forecast_service = sf.get_forecast_service()
     results = forecast_service.update_forecasts(history, latest_forecast)
 
-    storage_service = sf.get_storage_service()
-    storage_service.save_or_update(c.data_file, results)
+    if results != history:
+        storage_service.save_or_update(c.data_file, results)
 
     return {
         'forecast': results,

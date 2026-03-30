@@ -1,44 +1,27 @@
-import re
 from datetime import datetime as dt
+from service.service_factory import ServiceFactory
 
-import bs4
-import requests
 import config as c
 
 
 def lambda_handler(event, context):
+    headers = event["params"]["header"]
+    sf = ServiceFactory()
 
-    page = requests.get(c.medical_meteorology_url)
-
-    soup = bs4.BeautifulSoup(page.text, "html.parser")
-
-    days = soup.select(c.anchor)
-
-    results = []
-    for day in days:
-        front_type_el = day.select_one(c.front_type_class)
-        date_el = day.select_one(c.date_class)
-
-        if front_type_el and date_el:
-            front_type = front_type_el.text.strip()
-            date = re.sub(r"\s+", " ", date_el.text.strip())
-
-            datetime = parse(date)
-
-            results.append({'front_type': front_type, 'date': datetime})
+    scrape_data = (
+        parse_bool(headers[c.scrape_data_header_key])
+        if c.scrape_data_header_key in headers
+        else False
+    )
+    # if scrape_data:
+    ss = sf.get_scraper_service()
+    latest_forecast = ss.get_latest_forecast()
 
     return {
-        'forecast': results,
+        'forecast': latest_forecast,
         'timestamp': dt.now().isoformat()
     }
 
 
-def parse(date):
-    month, day, day_of_week = date.split(' ')
-    month = c.month_map[month]
-    day = int(day[:-2])
-
-    current_year = dt.now().year
-
-    datetime = dt(current_year, month, day)
-    return datetime.isoformat()
+def parse_bool(v):
+    return str(v).lower() in ("yes", "true", "t", "1")

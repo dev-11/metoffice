@@ -29,7 +29,7 @@ def lambda_handler(event, context):
     #     }
     # ]
 
-    result = record_forecast([], latest_forecast[0]["target_date"], latest_forecast[0]["front_type"])
+    result = record_forecast([], latest_forecast[0]["date"], latest_forecast[0]["front_type"])
 
     # [
     #     {

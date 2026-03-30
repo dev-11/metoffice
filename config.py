@@ -1,6 +1,9 @@
 scrape_data_header_key = "X-mb-scrape-data-header"
 
 medical_meteorology_url = "https://www.hazipatika.com/orvosmeteorologia"
+data_bucket = "metoffice-data"
+data_file = 'forecast.json'
+
 anchor = ".o-humanMeteoDay"
 front_type_class = ".o-humanMeteoDay__frontEffect"
 date_class = ".o-humanMeteoDay__datedata"

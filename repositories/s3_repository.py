@@ -25,12 +25,10 @@ class S3Repository:
             return False
         return True
 
-    def save_or_update_file(self, key, body, cache_update_date):
+    def save_or_update_file(self, key, body):
         try:
-            metadata = {"cache-update-date": str(cache_update_date)}
-
             obj = self._s3.Object(self._bucket, key)
-            obj.put(Body=body, Metadata=metadata)
+            obj.put(Body=body)
 
         except ClientError:
             return False

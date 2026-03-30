@@ -14,11 +14,19 @@ def lambda_handler(event, context):
     #     else False
     # )
     # if scrape_data:
-    ss = sf.get_scraper_service()
-    latest_forecast = ss.get_latest_forecast()
+    scraper_service = sf.get_scraper_service()
+    latest_forecast = scraper_service.get_latest_forecast()
+
+    # forecast_service = sf.get_forcast_service()
+    # forecast_service.update_forecast(latest_forecast)
+
+    storage_service = sf.get_storage_service()
+    is_saved = storage_service.save_or_update(c.data_file, latest_forecast)
+
+    forecasts = storage_service.get(c.data_file) if is_saved else {}
 
     return {
-        'forecast': latest_forecast,
+        'forecast': forecasts,
         'timestamp': dt.now().isoformat()
     }
 

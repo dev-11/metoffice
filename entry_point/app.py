@@ -1,5 +1,3 @@
-from datetime import datetime as dt
-from datetime import timezone
 from services import ServiceFactory
 
 import config as c
@@ -27,9 +25,11 @@ def lambda_handler(event, context):
     if results != history:
         storage_service.save_or_update(c.data_file, results)
 
+    time_service = sf.get_time_service()
+
     return {
-        'forecast': results,
-        'timestamp': dt.now().isoformat()
+        'forecast': time_service.to_local_time(results),
+        'timestamp': time_service.now()
     }
 
 

@@ -7,6 +7,8 @@ data_file = 'forecast.json'
 anchor = ".o-humanMeteoDay"
 front_type_class = ".o-humanMeteoDay__frontEffect"
 date_class = ".o-humanMeteoDay__datedata"
+temp_max = ".o-humanMeteoDay__data_max"
+temp_min = ".o-humanMeteoDay__data_min"
 
 month_map = {
     'január': 1,

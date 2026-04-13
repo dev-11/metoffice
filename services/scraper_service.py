@@ -18,14 +18,21 @@ class ScraperService:
         for day in days:
             front_type_el = day.select_one(c.front_type_class)
             date_el = day.select_one(c.date_class)
+            temp_min = day.select_one(c.temp_min)
+            temp_max = day.select_one(c.temp_max)
 
-            if front_type_el and date_el:
+            if front_type_el and date_el and temp_max and temp_min:
                 front_type = front_type_el.text.strip()
                 date = re.sub(r"\s+", " ", date_el.text.strip())
 
                 datetime = self.parse(date)
 
-                results.append({'front_type': front_type, 'target_date': datetime})
+                results.append({
+                    'front_type': front_type,
+                    'target_date': datetime,
+                    'temp_min': temp_min,
+                    'temp_max': temp_max
+                })
 
         return results
 

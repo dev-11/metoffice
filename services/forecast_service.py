@@ -4,11 +4,11 @@ from datetime import datetime, timezone
 class ForecastService:
     @staticmethod
     def update_forecast(day, forecast):
-        front_type = forecast["front_type"]
-        if not day["forecasts"] or day["forecasts"][-1]["front_type"] != front_type:
+        data = forecast["data"]
+        if not day["forecasts"] or day["forecasts"][-1]["data"] != data:
             day["forecasts"].append({
                 "observed_at": datetime.now(timezone.utc).isoformat(),
-                "front_type": front_type,
+                "data": data,
             })
         return day
 

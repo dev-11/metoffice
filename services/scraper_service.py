@@ -30,10 +30,12 @@ class ScraperService:
                 datetime = self.parse(date)
 
                 results.append({
-                    'front_type': front_type,
                     'target_date': datetime,
-                    'temp_min': temp_min,
-                    'temp_max': temp_max
+                    'data': {
+                        'front_type': front_type,
+                        'temp_min': temp_min,
+                        'temp_max': temp_max,
+                    }
                 })
 
         return results

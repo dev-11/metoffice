@@ -1,3 +1,4 @@
+import copy
 from datetime import datetime, timezone
 
 
@@ -13,7 +14,7 @@ class ForecastService:
         return day
 
     def update_forecasts(self, history, new_forecasts):
-        results = list(history)
+        results = copy.deepcopy(history)
 
         for f in new_forecasts:
             target_date = f["target_date"]

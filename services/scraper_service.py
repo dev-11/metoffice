@@ -22,10 +22,10 @@ class ScraperService:
             temp_max_el = day.select_one(c.temp_max_class)
 
             if front_type_el and date_el and temp_max_el and temp_min_el:
-                front_type = front_type_el.text.strip()
+                front_type = re.sub(r"\s+", " ", front_type_el.text.strip())
                 date = re.sub(r"\s+", " ", date_el.text.strip())
-                temp_max = temp_max_el.text.strip()
-                temp_min = temp_min_el.text.strip()
+                temp_max = re.sub(r"\s+", " ", temp_max_el.text.strip())
+                temp_min = re.sub(r"\s+", " ", temp_min_el.text.strip())
 
                 datetime = self.parse(date)
 

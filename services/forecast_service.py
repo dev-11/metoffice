@@ -6,7 +6,15 @@ class ForecastService:
     @staticmethod
     def update_forecast(day, forecast):
         data = forecast["data"]
-        if not day["forecasts"] or day["forecasts"][-1]["data"] != data:
+        last = day["forecasts"][-1] if day["forecasts"] else None
+
+        # A scrape with no front type shouldn't overwrite a front type we
+        # already determined for this day (e.g. a transient scrape glitch) —
+        # front type only ever moves from unknown to known, never back.
+        if last and not data.get("front_type") and last["data"].get("front_type"):
+            return day
+
+        if not last or last["data"] != data:
             day["forecasts"].append({
                 "observed_at": datetime.now(timezone.utc).isoformat(),
                 "data": data,
